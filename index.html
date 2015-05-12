@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Slicer</title>
+    <style type="text/css">
+      #preview {
+        position: absolute;
+        top: 150px;
+        width: 45%;
+        left: 1%;
+      }
+      #tile-out {
+        position: absolute;
+        top: 150px;
+        width: 45%;
+        right: 1%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Split image to tiles in browser</h1>
+    <span>Choose image:</span>
+    <input type="file" id="file-input">
+    <span>Tiles per second:</span>
+    <span id="fps"></span><br/>
+    <span>Image size:</span>
+    <span id="image-info"></span>
+    <canvas id="preview"></canvas>
+    <canvas id="tile-out" width="256" height="256"></canvas>
+    <script type="text/javascript" src="tailor.js"></script>
+  </body>
+</html>
