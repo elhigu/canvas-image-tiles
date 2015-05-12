@@ -38,6 +38,13 @@
           TODO: Couple of images why someone would like to use this...
           original image, and rotated image ready to be sliced.
         </p>
+        <h4>What it does?</h4>
+        <p>
+          Read huge image from file -> write data to canvas and preview canvas -> apply
+          rotate, scale, and translate to be able to read any part of
+          original image to 256x256 sized tile.
+          TODO: source image / result (and some functions to automatically resolve transformations from 4 points would be cool)
+        </p>
         <h4>Challenges</h4>
         <p>
           Image() object might be stored to GPU (happened on Chrome) which causes really bad performance when destination canvas is in host memory. If both source and destination are canvases it is more probable that both are in the same memory (both in host or both in GPU). 
