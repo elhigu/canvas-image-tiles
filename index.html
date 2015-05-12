@@ -29,12 +29,28 @@
     <div class="container">
       <section id="main_content">
         <h3>
-<a id="creating-tiles-from-huge-images-with-canvas-over-60fps" class="anchor" href="#creating-tiles-from-huge-images-with-canvas-over-60fps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating tiles from huge images with canvas over 60fps</h3>
+          <a id="creating-tiles-from-huge-images-with-canvas-over-60fps" class="anchor" href="#creating-tiles-from-huge-images-with-canvas-over-60fps" aria-hidden="true">
+            <span class="octicon octicon-link"></span>
+          </a>
+          Creating tiles from huge images with canvas over 60fps
+        </h3>
 
-<p>TODO: write small introduction what this does and why it is done this way (img tag was loaded directly to GPU mem on chrome, showing original image in tag was really hard so we use downscaled preview)</p>
+        <p>TODO: write small introduction what this does and why it is done this way (img tag was loaded directly to GPU mem on chrome, showing original image in tag was really hard so we use downscaled preview)</p>
+      </section>
+      <section>
+        <h3>Try it</h3>
+        <span>Choose image:</span>
+        <input type="file" id="file-input"><br/>
+        <span>Tiles per second:</span>
+        <span id="fps"></span><br/>
+        <span>Image size:</span>
+        <span id="image-info"></span>
+        <canvas id="preview"></canvas>
+        <canvas id="tile-out" width="256" height="256"></canvas>
       </section>
     </div>
 
+    <script type="text/javascript" src="javascripts/tailor.js"></script>
     
   </body>
 </html>
