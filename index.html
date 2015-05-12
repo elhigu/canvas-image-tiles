@@ -32,13 +32,27 @@
           <a id="creating-tiles-from-huge-images-with-canvas-over-60fps" class="anchor" href="#creating-tiles-from-huge-images-with-canvas-over-60fps" aria-hidden="true">
             <span class="octicon octicon-link"></span>
           </a>
-          Creating tiles from huge images with canvas over 60fps
+          Sampling tiles from huge images with canvas over 60fps
         </h3>
-
-        <p>TODO: write small introduction what this does and why it is done this way (img tag was loaded directly to GPU mem on chrome, showing original image in tag was really hard so we use downscaled preview)</p>
+        <p>
+          TODO: Couple of images why someone would like to use this...
+          original image, and rotated image ready to be sliced.
+        </p>
+        <h4>Challenges</h4>
+        <p>
+          Image() object might be stored to GPU (happened on Chrome) which causes really bad performance when destination canvas is in host memory. If both source and destination are canvases it is more probable that both are in the same memory (both in host or both in GPU). 
+        </p>
+        <p>
+          Showing original image in &lt;img&gt; tag and scaling it with CSS is slow for big over 100Mpixel images.
+        </p> 
       </section>
       <section>
         <h3>Try it</h3>
+        <p>
+          Reads file in, creates / shows preview (2048x2048) and starts read tiles 
+          from random positions of the original source image. Tiles are read on 
+          every animation frame (60fps) and drawn to other 256x256 sized tile canvas.
+        </p>
         <span>Choose image:</span>
         <input type="file" id="file-input"><br/>
         <span>Tiles per second:</span>
@@ -49,8 +63,7 @@
         <canvas id="tile-out" width="256" height="256"></canvas>
       </section>
     </div>
-
     <script type="text/javascript" src="javascripts/tailor.js"></script>
-    
+ 
   </body>
 </html>

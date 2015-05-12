@@ -78,7 +78,8 @@ fileInput.addEventListener('change', handleFileSelect, false);
 var frameCount = 0;
 function slicePieceToCanvas() {
   if (sourceReady) {
-    // clear canvas and old transformations
+    // clear canvas
+    canvas.width = canvas.width;
     var context = canvas.getContext('2d');
     context.save();
 
