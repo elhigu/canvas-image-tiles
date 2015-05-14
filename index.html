@@ -3,21 +3,78 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Slicer</title>
     <style type="text/css">
-      #tile-selector-grid {
+      #tile-out {
+        position: absolute;
+        top: 150px;
+        width: 256px;
+        left: 524px;
+      }
+
+      #image-fitter {
         position: absolute;
         top: 150px;
         width: 512px;
         height: 512px;
       }
+
+      #source-locator {
+        position: absolute;
+      }
+
+      .ctrl-btn {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        outline: 1px solid white;
+        opacity: 0.6;
+        z-index: 100;
+        cursor: pointer;
+        text-align: center;
+      }
+      .ctrl-btn:hover {
+        opacity: 1;
+      }
+      .ctrl-btn.move {
+        top: 5px;
+        right: 5px;
+        background: forestgreen;
+      }
+      .ctrl-btn.rotate {
+        top: 30px;
+        right: 5px;
+        background: darkred;
+      }
+      .ctrl-btn.scale {
+        top: 55px;
+        right: 5px;
+        background: dodgerblue;
+      }
+
       #preview {
         width: 512px;
         height: 100%;
       }
-      #tile-out {
+
+      #tile-selector-grid {
         position: absolute;
-        top: 150px;
-        width: 45%;
-        right: 1%;
+        width: 100%;
+        height: 100%;
+      }
+
+      #tile-selector-grid .cell {
+        width: 64px;
+        height: 64px;
+        outline: 1px solid;
+        opacity: 0.5;
+        float: left;
+      }
+
+      #tile-selector-grid .cell:hover {
+        background: aliceblue;
+      }
+
+      #tile-selector-grid .cell.selected {
+        background: yellow;
       }
     </style>
   </head>
@@ -29,11 +86,22 @@
     <span id="fps"></span><br/>
     <span>Image size:</span>
     <span id="image-info"></span>
-    <div id="tile-selector-grid">
+    <div id="image-fitter">
       <div id="source-locator">
         <canvas id="preview"></canvas>
-        <button>Move</button>
-        <button>Rotate</button>
+        <div class="ctrl-btn move">M</div>
+        <div class="ctrl-btn rotate">R</div>
+        <div class="ctrl-btn scale">S</div>
+      </div>
+      <div id="tile-selector-grid">
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       </div>
     </div>
     <canvas id="tile-out" width="256" height="256"></canvas>
