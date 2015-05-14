@@ -3,11 +3,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Slicer</title>
     <style type="text/css">
-      #preview {
+      #tile-selector-grid {
         position: absolute;
         top: 150px;
-        width: 45%;
-        left: 1%;
+        width: 512px;
+        height: 512px;
+      }
+      #preview {
+        width: 512px;
+        height: 100%;
       }
       #tile-out {
         position: absolute;
@@ -25,7 +29,13 @@
     <span id="fps"></span><br/>
     <span>Image size:</span>
     <span id="image-info"></span>
-    <canvas id="preview"></canvas>
+    <div id="tile-selector-grid">
+      <div id="source-locator">
+        <canvas id="preview"></canvas>
+        <button>Move</button>
+        <button>Rotate</button>
+      </div>
+    </div>
     <canvas id="tile-out" width="256" height="256"></canvas>
     <script type="text/javascript" src="tailor.js"></script>
   </body>

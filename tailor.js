@@ -90,9 +90,9 @@ function slicePieceToCanvas() {
     context.translate(-sourceCanvas.width*Math.random(), -sourceCanvas.height*Math.random());
 
     context.drawImage(sourceCanvas, 0, 0);
-    frameCount++;
     context.restore();
   }
+  frameCount++;
   requestAnimationFrame(slicePieceToCanvas);    
 }
 // start render loop on next animation frame
