@@ -14,12 +14,21 @@
 
 #source-locator {
   position: absolute;
+  transform: translateX(-40%) translateY(-40%) scale(0.2) rotate(1deg);
+}
+
+.buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: scale(5) rotate(-1deg);
 }
 
 .ctrl-btn {
-  position: absolute;
   width: 30px;
   height: 30px;
+  float: right;
+  clear: both;
   outline: 1px solid white;
   opacity: 0.6;
   z-index: 100;
@@ -32,24 +41,13 @@
   opacity: 1;
 }
 .ctrl-btn.move {
-  top: 5px;
-  right: 5px;
   background: forestgreen;
 }
 .ctrl-btn.rotate {
-  top: 40px;
-  right: 5px;
   background: darkred;
 }
 .ctrl-btn.scale {
-  top: 75px;
-  right: 5px;
   background: dodgerblue;
-}
-
-#preview {
-  width: 512px;
-  height: 100%;
 }
 
 #tile-selector-grid {
