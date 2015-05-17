@@ -7,6 +7,18 @@ var sourceReady = false;
 var sourceCanvas = document.createElement('canvas');
 var previewCanvas = document.getElementById('preview');
 
+var orientation = {
+  scale: 0.2,
+  rotation: 0,
+  position: {
+    x: 0,
+    y: 0
+  },
+  getTransform: function () {
+    return "translateX(-40%) translateY(-40%) scale(0.2) rotate(1deg);";
+  }
+};
+
 /**
  * Load image data from file and create original sized canvas from it for
  * generating tiles and lower resolution preview for showing it in screen.
@@ -113,3 +125,23 @@ function updateFps() {
   previousMilliseconds = currentMs;
 }
 setInterval(updateFps, 2000);
+
+/**
+ * Select bounding box where tile should tile should be read from.
+ */
+var selectorGrid = document.getElementById('tile-selector-grid');
+var previouslySelected = null;
+function onGridCellClick(event) {
+  var el = event.target;
+  if (previouslySelected) {
+    previouslySelected.removeAttribute('selected');
+  }
+  el.setAttribute('selected', true);
+  previouslySelected = el;
+  console.log("Clicketi click", event, el.offsetTop, el.offsetLeft);
+}
+selectorGrid.addEventListener('click', onGridCellClick, false);
+
+/**
+ * Adjust preview position on top of tiles.
+ */
