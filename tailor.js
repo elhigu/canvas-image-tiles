@@ -7,7 +7,14 @@ var sourceReady = false;
 var sourceCanvas = document.createElement('canvas');
 var previewCanvas = document.getElementById('preview');
 
+/**
+ * Reset this, always when there is new image loaded...
+ * Adjust this with R, M and S buttons and hammer events...
+ * Check this in animationFrame and update transformation if was changed...
+ * Update this on grid select too...
+ */
 var orientation = {
+  selectedGridPos: { x: 0, y: 0},
   scale: 0.2,
   rotation: 0,
   position: {
@@ -145,3 +152,56 @@ selectorGrid.addEventListener('click', onGridCellClick, false);
 /**
  * Adjust preview position on top of tiles.
  */
+var rotationButton = document.querySelector('.ctrl-btn.rotate');
+var moveButton = document.querySelector('.ctrl-btn.move');
+var scaleButton = document.querySelector('.ctrl-btn.scale');
+
+var moveEl = null;
+var lastPos = null;
+function getPos(event) {
+  return { x: event.screenX, y: event.screenY };
+}
+
+rotationButton.addEventListener('mousedown', startMouseMove, false);
+moveButton.addEventListener('mousedown', startMouseMove, false);
+scaleButton.addEventListener('mousedown', startMouseMove, false);
+function startMouseMove(event) {
+  moveEl = event.target;
+  lastPos = getPos(event);
+}
+
+/**
+ * Convert mousedown and mousemove events to relative mouse events
+ */
+function mouseMove(event) {
+  if (event.buttons === 0) {
+    moveEl = null;
+  }
+  if (moveEl !== null) {
+    var currPos = getPos(event);
+    var dx = currPos.x - lastPos.x;
+    var dy = currPos.y - lastPos.y;
+    var speed = Math.sqrt(dx*dx + dy*dy);
+    speed = (dy > 0) ? speed : -speed;
+    moveEl.dispatchEvent(new CustomEvent('relativemouse', { detail: {
+      dx: dx,
+      dy: dy,
+      speed: speed
+    }}));
+    lastPos = currPos;
+  }
+}
+document.body.addEventListener('mousemove', mouseMove, false);
+
+/**
+ * Adjust image orientation
+ */
+rotationButton.addEventListener('relativemouse', function (event) {
+  console.log("Adjust rotate", event.detail.speed, event);
+}, false);
+moveButton.addEventListener('relativemouse', function (event) {
+  console.log("Adjust position", event.detail.dx, event.detail.dy, event);
+}, false);
+scaleButton.addEventListener('relativemouse', function (event) {
+  console.log("Adjust scale", event.detail.speed, event);
+}, false);
