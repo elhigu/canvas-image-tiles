@@ -60,13 +60,34 @@
           from random positions of the original source image. Tiles are read on 
           every animation frame (60fps) and drawn to other 256x256 sized tile canvas.
         </p>
+
+        <h1>Split image to tiles in browser</h1>
         <span>Choose image:</span>
-        <input type="file" id="file-input"><br/>
+        <input type="file" id="file-input">
         <span>Tiles per second:</span>
         <span id="fps"></span><br/>
         <span>Image size:</span>
         <span id="image-info"></span>
-        <canvas id="preview"></canvas>
+        <div id="image-fitter">
+          <div id="tile-selector-grid">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          </div>
+          <div id="source-locator">
+            <canvas id="preview"></canvas>
+          </div>
+          <div class="buttons">
+            <div class="ctrl-btn move">M</div>
+            <div class="ctrl-btn rotate">R</div>
+            <div class="ctrl-btn scale">S</div>
+          </div>
+        </div>
         <canvas id="tile-out" width="256" height="256"></canvas>
       </section>
     </div>
