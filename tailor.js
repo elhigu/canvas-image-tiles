@@ -8,10 +8,7 @@ var sourceCanvas = document.createElement('canvas');
 var previewCanvas = document.getElementById('preview');
 
 /**
- * Reset this, always when there is new image loaded...
- * Adjust this with R, M and S buttons and hammer events...
- * Check this in animationFrame and update transformation if was changed...
- * Update this on grid select too...
+ * Orientation, how image was moved... could write this as real class...
  */
 var previewLocator = document.getElementById('source-locator');
 // make this to be class
@@ -77,6 +74,7 @@ var orientation = {
  * e.g. Chrome did automatically store image in GPU memory, which caused 
  * reading image for creating tiles with drawImage to be really slow.
  */
+var gridCenterEl = document.querySelector('#tile-selector-grid .cell:nth-child(28)');
 function handleFileSelect(evt) {
   previewCanvas.width = 200;
   previewCanvas.height = 200;
@@ -124,7 +122,7 @@ function handleFileSelect(evt) {
             0,0,previewCanvas.width,previewCanvas.height
           );
           orientation.initFromLoadedImage(previewCanvas, sourceCanvas);
-
+          gridCenterEl.click();
           imageInfo.textContent = sourceCanvas.width + "x" + sourceCanvas.height;
         };
         newImage.src = evt.target.result;
@@ -146,15 +144,18 @@ function slicePieceToCanvas() {
     var context = canvas.getContext('2d');
     context.save();
 
-
+    // offset position according to how image is moved from center point and which grid position was selected
+    var srcX = orientation.position.x - (orientation.selectedGridPos.x-64*4);
+    var srcY = orientation.position.y - (orientation.selectedGridPos.y-64*4);
+    context.translate(srcX*4, srcY*4);
 
     // scale, rotate, position for receiving canvas
-    var scale = orientation.scale*orientation.previewScale;
+    var scale = orientation.scale*orientation.previewScale*(256/64);
     context.scale(scale,scale);
     context.rotate(orientation.rotation);
+    // origo for scaling and rotate to center of the image
     context.translate(-sourceCanvas.width/2, -sourceCanvas.height/2);
-
-    context.drawImage(sourceCanvas, 0, 0, 64/scale, 64/scale, 0, 0, 256, 256);
+    context.drawImage(sourceCanvas, 0, 0);
     context.restore();
   }
   frameCount++;
@@ -192,7 +193,7 @@ function onGridCellClick(event) {
   el.setAttribute('selected', true);
   previouslySelected = el;
   orientation.selectedGridPos = { x: el.offsetLeft, y: el.offsetTop };
-  console.log("Clicketi click", event, el.offsetTop, el.offsetLeft);
+  console.log("Selected grid position", event, el.offsetTop, el.offsetLeft);
 }
 selectorGrid.addEventListener('click', onGridCellClick, false);
 
