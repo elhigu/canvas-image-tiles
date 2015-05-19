@@ -13,6 +13,8 @@ var previewCanvas = document.getElementById('preview');
  * Check this in animationFrame and update transformation if was changed...
  * Update this on grid select too...
  */
+var previewLocator = document.getElementById('source-locator');
+// make this to be class
 var orientation = {
   selectedGridPos: { x: 0, y: 0},
   scale: 0.2,
@@ -21,8 +23,49 @@ var orientation = {
     x: 0,
     y: 0
   },
+  waitForUpdate: false,
+  updateOrientation: function (update) {
+    if (update) {
+      if (update.deltaRotation) {
+        this.rotation += update.deltaRotation;
+      }
+      if (update.deltaScale) {
+        this.scale += update.deltaScale;
+      }
+      if (update.deltaPosition) {
+        this.position.x += update.deltaPosition.x;
+        this.position.y += update.deltaPosition.y;
+      }
+    }
+
+    if (!this.waitForUpdate) {
+      this.waitForUpdate = true;
+      requestAnimationFrame(function () {
+        console.log("Updating transform...", this.getTransform());
+        this.waitForUpdate = false;
+        previewLocator.style.transform = this.getTransform();
+      }.bind(this));
+    }
+  },
+  initFromLoadedImage: function (previewCanvas, fullCanvas) {
+    this.previewScale = previewCanvas.width / fullCanvas.width;
+    // good scale for image to fit 512x512 area
+    this.scale = 0.2;
+    this.rotation = 0;
+    // put scaled image to center of grid
+    this.position.x = 0;
+    this.position.y = 0;
+    this.updateOrientation(); // trigger updating style
+  },
   getTransform: function () {
-    return "translateX(-40%) translateY(-40%) scale(0.2) rotate(1deg);";
+    var posOffsetX = -previewCanvas.width/2 + 256;
+    var posOffsetY = -previewCanvas.height/2 + 256;
+    return [
+      "translateX(" + (this.position.x + posOffsetX) + "px)",
+      "translateY(" + (this.position.y + posOffsetY) + "px)",
+      "scale(" + this.scale + ")",
+      "rotate(" + this.rotation + "rad)"
+    ].join(" ");
   }
 };
 
@@ -80,6 +123,7 @@ function handleFileSelect(evt) {
             0,0,sourceCanvas.width,sourceCanvas.height,
             0,0,previewCanvas.width,previewCanvas.height
           );
+          orientation.initFromLoadedImage(previewCanvas, sourceCanvas);
 
           imageInfo.textContent = sourceCanvas.width + "x" + sourceCanvas.height;
         };
@@ -102,13 +146,15 @@ function slicePieceToCanvas() {
     var context = canvas.getContext('2d');
     context.save();
 
-    // scale, rotate, position for receiving canvas
-    var scale = Math.random()*2;
-    context.scale(scale,scale)
-    context.rotate(Math.random()*Math.PI*2);
-    context.translate(-sourceCanvas.width*Math.random(), -sourceCanvas.height*Math.random());
 
-    context.drawImage(sourceCanvas, 0, 0);
+
+    // scale, rotate, position for receiving canvas
+    var scale = orientation.scale*orientation.previewScale;
+    context.scale(scale,scale);
+    context.rotate(orientation.rotation);
+    context.translate(-sourceCanvas.width/2, -sourceCanvas.height/2);
+
+    context.drawImage(sourceCanvas, 0, 0, 64/scale, 64/scale, 0, 0, 256, 256);
     context.restore();
   }
   frameCount++;
@@ -145,6 +191,7 @@ function onGridCellClick(event) {
   }
   el.setAttribute('selected', true);
   previouslySelected = el;
+  orientation.selectedGridPos = { x: el.offsetLeft, y: el.offsetTop };
   console.log("Clicketi click", event, el.offsetTop, el.offsetLeft);
 }
 selectorGrid.addEventListener('click', onGridCellClick, false);
@@ -166,6 +213,7 @@ rotationButton.addEventListener('mousedown', startMouseMove, false);
 moveButton.addEventListener('mousedown', startMouseMove, false);
 scaleButton.addEventListener('mousedown', startMouseMove, false);
 function startMouseMove(event) {
+  event.preventDefault();
   moveEl = event.target;
   lastPos = getPos(event);
 }
@@ -197,11 +245,13 @@ document.body.addEventListener('mousemove', mouseMove, false);
  * Adjust image orientation
  */
 rotationButton.addEventListener('relativemouse', function (event) {
-  console.log("Adjust rotate", event.detail.speed, event);
+  orientation.updateOrientation({ deltaRotation: event.detail.speed/100 });
 }, false);
 moveButton.addEventListener('relativemouse', function (event) {
-  console.log("Adjust position", event.detail.dx, event.detail.dy, event);
+  orientation.updateOrientation({
+    deltaPosition: { x: event.detail.dx, y: event.detail.dy }
+  });
 }, false);
 scaleButton.addEventListener('relativemouse', function (event) {
-  console.log("Adjust scale", event.detail.speed, event);
+  orientation.updateOrientation({ deltaScale: event.detail.speed/100 });
 }, false);
