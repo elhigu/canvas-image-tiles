@@ -41,6 +41,7 @@ var orientation = {
         console.log("Updating transform...", this.getTransform());
         this.waitForUpdate = false;
         previewLocator.style.transform = this.getTransform();
+        requestAnimationFrame(slicePieceToCanvas);
       }.bind(this));
     }
   },
@@ -69,12 +70,12 @@ var orientation = {
 /**
  * Load image data from file and create original sized canvas from it for
  * generating tiles and lower resolution preview for showing it in screen.
- * 
+ *
  * Image element could be used directly as a source for craeating tiles, but
- * e.g. Chrome did automatically store image in GPU memory, which caused 
+ * e.g. Chrome did automatically store image in GPU memory, which caused
  * reading image for creating tiles with drawImage to be really slow.
  */
-var gridCenterEl = document.querySelector('#tile-selector-grid .cell:nth-child(28)');
+var gridCenterEl = document.querySelector('#tile-selector-grid .cell:nth-child(36)');
 function handleFileSelect(evt) {
   previewCanvas.width = 512;
   previewCanvas.height = 512;
@@ -83,9 +84,9 @@ function handleFileSelect(evt) {
   ctx.font = "bold 28px Arial";
   ctx.fillText("Behold...", 128, 256);
 
-	var files = evt.target.files;
-	var output = [];
-	for (var i = 0, f; f = files[i]; i++) {
+  var files = evt.target.files;
+  var output = [];
+  for (var i = 0, f; f = files[i]; i++) {
     sourceReady = false;
     console.log(f);
     var reader = new FileReader();
@@ -101,7 +102,7 @@ function handleFileSelect(evt) {
           sourceCanvas.height = newImage.naturalHeight;
 
           // copy image to canvas, to prevent img tag being stored in GPU memory
-          // which did slow down slicing hugely on chrome 
+          // which did slow down slicing hugely on chrome
           // (or we could write webgl slicing for that case)...
           var sourceCtx = sourceCanvas.getContext('2d');
           sourceCtx.drawImage(newImage, 0, 0);
@@ -117,7 +118,7 @@ function handleFileSelect(evt) {
             previewCanvas.height = previewCanvas.width/aspectRatio;
           }
           var previewCtx = previewCanvas.getContext('2d');
-          previewCtx.drawImage(sourceCanvas, 
+          previewCtx.drawImage(sourceCanvas,
             0,0,sourceCanvas.width,sourceCanvas.height,
             0,0,previewCanvas.width,previewCanvas.height
           );
@@ -159,10 +160,7 @@ function slicePieceToCanvas() {
     context.restore();
   }
   frameCount++;
-  requestAnimationFrame(slicePieceToCanvas);    
 }
-// start render loop on next animation frame
-requestAnimationFrame(slicePieceToCanvas);
 
 /**
  * Update fps counter every 2 secs if image data is ready.
@@ -194,6 +192,7 @@ function onGridCellClick(event) {
   previouslySelected = el;
   orientation.selectedGridPos = { x: el.offsetLeft, y: el.offsetTop };
   console.log("Selected grid position", event, el.offsetTop, el.offsetLeft);
+  requestAnimationFrame(slicePieceToCanvas);
 }
 selectorGrid.addEventListener('click', onGridCellClick, false);
 

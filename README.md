@@ -1,4 +1,4 @@
-## Create 256x256 tiles from huge (over 100Mpixel) input image with html5 canvas 
+## Create tiles from huge (over 100Mpixel) input image with html5 canvas
 Checkout the online demo: http://elhigu.github.io/canvas-image-tiles
 
 ## Implementation
