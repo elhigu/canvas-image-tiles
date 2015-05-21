@@ -7,8 +7,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
 
-    <title>Canvas image tiles by elhigu</title>
+    <title>Split image to tiles with canvas</title>
   </head>
 
   <body>
@@ -29,45 +30,54 @@
     <div class="container">
       <section id="main_content">
         <h3>
-          <a id="creating-tiles-from-huge-images-with-canvas-over-60fps" class="anchor" href="#creating-tiles-from-huge-images-with-canvas-over-60fps" aria-hidden="true">
+          <a id="creating-tiles-from-huge-images-with-canvas" class="anchor" href="#creating-tiles-from-huge-images-with-canvas-over-60fps" aria-hidden="true">
             <span class="octicon octicon-link"></span>
           </a>
-          Sampling tiles from huge images with canvas over 60fps
+          Sampling tiles from huge images with canvas
         </h3>
-        <p>
-          TODO: Couple of images why someone would like to use this...
-          original image, and rotated image ready to be sliced.
-        </p>
         <h4>What it does?</h4>
         <p>
-          Read huge image from file -> write data to canvas and preview canvas -> apply
-          rotate, scale, and translate to be able to read any part of
-          original image to 256x256 sized tile.
-          TODO: source image / result (and some functions to automatically resolve transformations from 4 points would be cool)
+          <ol>
+            <li>Reads huge e.g. 250Mpixel image from file</li>
+            <li>Stores original data to <em>full size non visible canvas</em> and visible version of image to
+              <em>preview canvas</em></li>
+            <li>Apply <em>rotate</em>, <em>scale</em>, and <em>translate</em> to be able to read any part
+              of original image to 256x256 sized tile.</li>
+          </ol>
+        </p>
+        <p>
+          Proof of concept implementation to demonstrate splitting custom map tiles in browser instead of backend.
+          Issues/more info listed in <a href="https://github.com/elhigu/canvas-image-tiles"><span class="icon"></span>https://github.com/elhigu/canvas-image-tiles</a>
         </p>
         <h4>Challenges</h4>
         <p>
-          Image() object might be stored to GPU (happened on Chrome) which causes really bad performance when destination canvas is in host memory. If both source and destination are canvases it is more probable that both are in the same memory (both in host or both in GPU). 
+          Read Image() object might be stored to GPU (happened on Chrome) which causes really bad performance
+          when destination canvas where tile is written is in host memory. If both source and destination are
+          canvases it is more probable that both are in the same memory (both in host or both in GPU).
         </p>
         <p>
-          Showing original image in &lt;img&gt; tag and scaling it with CSS is slow for big over 100Mpixel images.
+          Showing original image in <em>&lt;img&gt;</em> tag and scaling it with CSS is slow for big images.
+          This why we are using down scaled <em>preview canvas</em> to adjust image orientation for reading
+          pieces.
         </p> 
       </section>
       <section>
         <h3>Try it</h3>
         <p>
-          Reads file in, creates / shows preview (2048x2048) and starts read tiles 
-          from random positions of the original source image. Tiles are read on 
-          every animation frame (60fps) and drawn to other 256x256 sized tile canvas.
+          Reads file in, creates / shows preview (max 2048x2048). Preview is used to fit image on top
+          of grid which is used to select which part of image should be read to 256x256 tile.
+        </p>
+        <p>
+          Drag from <b>S (Scale)</b>, <b>M (Move)</b>, and <b>R (Rotate)</b> buttons to adjust preview image position.
         </p>
 
-        <h1>Split image to tiles in browser</h1>
         <span>Choose image:</span>
-        <input type="file" id="file-input">
-        <span>Tiles per second:</span>
+        <input type="file" id="file-input"><br/>
+        <span>Fps:</span>
         <span id="fps"></span><br/>
         <span>Image size:</span>
         <span id="image-info"></span>
+
         <div id="image-fitter">
           <div id="tile-selector-grid">
             <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>

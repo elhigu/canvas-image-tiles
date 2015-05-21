@@ -1,0 +1,82 @@
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+#tile-out {
+  position: relative;
+  outline: 1px solid;
+  margin-top: 20px;
+  left: 128px;
+  width: 256px;
+}
+
+#image-fitter {
+  position: relative;
+  width: 512px;
+  height: 512px;
+  overflow: hidden;
+}
+
+#tile-selector-grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+#tile-selector-grid .cell {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  outline: 1px solid;
+  opacity: 0.5;
+  float: left;
+}
+
+#tile-selector-grid .cell:hover {
+  background: aliceblue;
+}
+
+#tile-selector-grid .cell[selected] {
+  background: yellow;
+}
+
+#source-locator {
+  position: absolute;
+  z-index: 0;
+}
+
+.buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.ctrl-btn {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  float: right;
+  clear: both;
+  outline: 1px solid white;
+  opacity: 0.6;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  line-height: 30px;
+}
+.ctrl-btn:hover {
+  opacity: 1;
+}
+.ctrl-btn.move {
+  background: forestgreen;
+}
+.ctrl-btn.rotate {
+  background: darkred;
+}
+.ctrl-btn.scale {
+  background: dodgerblue;
+}
