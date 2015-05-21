@@ -70,18 +70,18 @@ var orientation = {
  * Load image data from file and create original sized canvas from it for
  * generating tiles and lower resolution preview for showing it in screen.
  * 
- * Image element could be used directly as a source for creating tiles, but
+ * Image element could be used directly as a source for craeating tiles, but
  * e.g. Chrome did automatically store image in GPU memory, which caused 
  * reading image for creating tiles with drawImage to be really slow.
  */
 var gridCenterEl = document.querySelector('#tile-selector-grid .cell:nth-child(28)');
 function handleFileSelect(evt) {
-  previewCanvas.width = 200;
-  previewCanvas.height = 200;
+  previewCanvas.width = 512;
+  previewCanvas.height = 512;
   var ctx = previewCanvas.getContext('2d');
   ctx.fillStyle = "blue";
-  ctx.font = "bold 16px Arial";
-  ctx.fillText("Loading....", 0, 100);
+  ctx.font = "bold 28px Arial";
+  ctx.fillText("Behold...", 128, 256);
 
 	var files = evt.target.files;
 	var output = [];
