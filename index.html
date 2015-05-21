@@ -51,6 +51,12 @@
         </p>
         <h4>Challenges</h4>
         <p>
+          Transforming huge image could be slow with canvas. So actually we are not doing any transformations
+          to source image, but just do inverse transformations for destination canvas to get correct data from
+          huge source image. I.e. we rotate, scale and move 256x256 square to top of source and then fill
+          it with data from correct position.
+        </p>
+        <p>
           Read Image() object might be stored to GPU (happened on Chrome) which causes really bad performance
           when destination canvas where tile is written is in host memory. If both source and destination are
           canvases it is more probable that both are in the same memory (both in host or both in GPU).
