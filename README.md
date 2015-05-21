@@ -1,11 +1,9 @@
-## Create tiles from huge (over 100Mpixel) input image with html5 canvas
+## Rotate, scale and position huge (over 100Mpixel) input image and split it to tiles with html5 canvas
 Checkout the online demo: http://elhigu.github.io/canvas-image-tiles
 
 ## Implementation
 Plain html/css/javascript and optionally `hammer.js` to support touch screen events better.
 Tried to make it as easy as possible to wrap to work for any framework.
-
-Proof of concept type and could use quite a lot refactoring.
 
 ## To play around with it
 ```
