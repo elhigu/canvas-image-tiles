@@ -2,8 +2,10 @@
 Checkout the online demo: http://elhigu.github.io/canvas-image-tiles
 
 ## Implementation
-Plain html/css/javascript and optionally `hammer.js` to support touch screen events better.
-Tried to make it as easy as possible to wrap to work for any framework.
+Plain html/css/javascript uses `hammer.js` to support touch screen events.
+
+Canvas / preview creation transformation calculations etc. is in separate class to make it as
+easy as possible to wrap to splitting to work with any framework.
 
 ## To play around with it
 ```
