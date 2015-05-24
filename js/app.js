@@ -104,7 +104,7 @@ var appContext = (function () {
     selectPosition(posX, posY);
     console.log("Selected grid position", event, posX, posY);
   }
-  previewArea.addEventListener('click', onPreviewAreaClick, false);
+  previewArea.addEventListener('mousedown', onPreviewAreaClick, false);
 
   /**
    * Adjust image orientation.
@@ -122,11 +122,27 @@ var appContext = (function () {
   rotationButton.addEventListener('mousedown', startMouseMove, false);
   moveButton.addEventListener('mousedown', startMouseMove, false);
   scaleButton.addEventListener('mousedown', startMouseMove, false);
+
   function startMouseMove(event) {
+    event.stopPropagation();
     event.preventDefault();
     moveEl = event.target;
     lastPos = getPos(event);
   }
+
+  // stop mouse move if leaving window
+  document.body.addEventListener('mouseout', function (event) {
+    event.preventDefault();
+    if(event.relatedTarget === document.querySelector('html')) {
+      moveEl = null;
+    }
+  }, false);
+
+  // stop mouse move if stopped pressing mouse button
+  document.body.addEventListener('mouseup', function (event) {
+    event.preventDefault();
+    moveEl = null;
+  }, false);
 
   /**
    * Convert mousedown and mousemove events to relative mouse events
