@@ -81,7 +81,10 @@ CanvasShredder.prototype.updateOrientation = function (update) {
     this.waitForPreviewCssUpdate = true;
     requestAnimationFrame(function () {
       if (this.previewCanvas) {
-        this.previewCanvas.style.transform = this.getPreviewCssTransform();
+        var transformCss = this.getPreviewCssTransform();
+        this.previewCanvas.style.transform = transformCss;
+        this.previewCanvas.style.WebkitTransform = transformCss;
+        this.previewCanvas.style.MozTransform = transformCss;
         this.waitForPreviewCssUpdate = false;
       }
     }.bind(this));
