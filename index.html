@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
 
+    <script type="text/javascript" src="lib/hammer.js"></script>
+    <script type="text/javascript" src="javascripts/CanvasShredder.js"></script>
+
     <title>Split image to tiles with canvas</title>
   </head>
 
@@ -47,7 +50,7 @@
         </p>
         <p>
           Proof of concept implementation to demonstrate splitting custom map tiles in browser instead of backend.
-          Issues/more info listed in <a href="https://github.com/elhigu/canvas-image-tiles"><span class="icon"></span>https://github.com/elhigu/canvas-image-tiles</a>
+          Issues/more info found in <a href="https://github.com/elhigu/canvas-image-tiles"><span class="icon"></span>https://github.com/elhigu/canvas-image-tiles</a>
         </p>
         <h4>Challenges</h4>
         <p>
@@ -82,32 +85,22 @@
         <span>Fps:</span>
         <span id="fps"></span><br/>
         <span>Image size:</span>
-        <span id="image-info"></span>
+        <span id="image-info"></span><br/>
 
-        <div id="image-fitter">
-          <div id="tile-selector-grid">
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-          </div>
-          <div id="source-locator">
-            <canvas id="preview"></canvas>
-          </div>
+        <span>Click area below to select tile position</span>
+        <div id="preview-area">
+          <div id="select-position"></div>
           <div class="buttons">
             <div class="ctrl-btn move">M</div>
             <div class="ctrl-btn rotate">R</div>
             <div class="ctrl-btn scale">S</div>
           </div>
+          <canvas id="dst-canvas" width="256" height="256"></canvas>
         </div>
         <canvas id="tile-out" width="256" height="256"></canvas>
       </section>
     </div>
-    <script type="text/javascript" src="javascripts/tailor.js"></script>
+    <script type="text/javascript" src="javascripts/app.js"></script>
  
   </body>
 </html>
