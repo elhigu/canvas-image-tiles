@@ -59,23 +59,17 @@ var appContext = (function () {
       }
       shredder = null;
       console.log(f);
-      var reader = new FileReader();
-      reader.onloadend = function (evt) {
-        if (evt.target.readyState == FileReader.DONE) {
-          // load data to image element, to be able to create preview and
-          // original image canvases
-          var newImage = document.createElement('img');
-          newImage.onload = function() {
-            shredder = new CanvasShredder(newImage, previewArea);
-            selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
-            imageInfo.textContent =
-              shredder.srcCanvas.width + "x" +
-              shredder.srcCanvas.height;
-          };
-          newImage.src = evt.target.result;
-        }
+      // load data to image element, to be able to create preview and
+      // original image canvases
+      var newImage = document.createElement('img');
+      newImage.onload = function() {
+        shredder = new CanvasShredder(newImage, previewArea);
+        selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
+        imageInfo.textContent =
+          shredder.srcCanvas.width + "x" +
+          shredder.srcCanvas.height;
       };
-      reader.readAsDataURL(f);
+      newImage.src = URL.createObjectURL(f);
     }
   }
   fileInput.addEventListener('change', handleFileSelect, false);

@@ -17,7 +17,9 @@ open index.html
 ## Compatibility notes
 On OSX Safari sampling tiles from over 100M pixel images pauses every now and then. Timeline doesn't show any apparent reason why that is happening.
 
-On iOS fails silently if image is too big for mobile browser. Haven't connected to debugger to see if there could be something to do to fix it...
+iOS cannot load big images from file, but if one tries to load over few megapixel image it will get
+down sampled before it is given to javascript side http://stackoverflow.com/questions/15542045/mobile-safari-downsamples-large-images-how-to-retain
+Also really big images just fail silently.
 
 On IE really big images didn't work perfectly some not enough storage error occurred.
 
