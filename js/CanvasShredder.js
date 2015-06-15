@@ -119,6 +119,10 @@ CanvasShredder.prototype.updateOrientation = function (update) {
       this.position.x += update.deltaPosition.x;
       this.position.y += update.deltaPosition.y;
     }
+    if (update.absPosition) {
+      this.position.x = update.absPosition.x;
+      this.position.y = update.absPosition.y;
+    }
   }
 
   // update preview CSS before next paint

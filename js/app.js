@@ -216,5 +216,28 @@ var appContext = (function () {
     }
   }, false);
 
+  var mc = new Hammer(previewArea);
+  var startPosition = { x: 0, y: 0 };
+  mc.on("panstart", function (ev) {
+    startPosition.x = shredder.position.x;
+    startPosition.y = shredder.position.y;
+  });
+
+  mc.on("panmove", function(ev) {
+    ev.preventDefault();
+    if (shredder) {
+      shredder.updateOrientation({
+        absPosition: {x: startPosition.x + ev.deltaX, y: startPosition.y + ev.deltaY}
+      });
+      needsUpdate = true;
+    }
+  });
+
+  /**
+   * Touchscreen events
+   mc.on("rotatestart rotatemove", onRotate);
+   mc.on("pinchstart pinchmove", onPinch);
+   */
+
   return app;
 })();
