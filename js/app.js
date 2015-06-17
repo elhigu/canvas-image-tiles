@@ -210,15 +210,28 @@ var appContext = (function () {
     }
   }, false);
 
+  /**
+   * Touch events for tablets etc.
+   */
+
   var mc = new Hammer(previewArea);
-  var startPosition = { x: 0, y: 0 };
+  mc.get('pinch').set({ enable: true });
+  mc.get('rotate').set({ enable: true });
+
+  mc.on("tap", function (event) {
+    var posX = (event.center.x-previewArea.offsetLeft) - slicePosition.size/2;
+    var posY = (event.center.y-previewArea.offsetTop) - slicePosition.size/2;
+    selectPosition(posX, posY);
+    console.log("Selected grid position", event, posX, posY);
+  });
+
+  var startPosition = {};
   mc.on("panstart", function (ev) {
-    startPosition.x = shredder.position.x;
-    startPosition.y = shredder.position.y;
+    startPosition.x = shredder && shredder.position.x || 0;
+    startPosition.y = shredder && shredder.position.y || 0;
   });
 
   mc.on("panmove", function(ev) {
-    ev.preventDefault();
     if (shredder) {
       shredder.updateOrientation({
         absPosition: {x: startPosition.x + ev.deltaX, y: startPosition.y + ev.deltaY}
@@ -227,11 +240,33 @@ var appContext = (function () {
     }
   });
 
-  /**
-   * Touchscreen events
-   mc.on("rotatestart rotatemove", onRotate);
-   mc.on("pinchstart pinchmove", onPinch);
-   */
+  var startAngle = null;
+  mc.on("rotatestart", function (ev) {
+    startAngle = shredder && shredder.rotation || 0;
+  });
+
+  mc.on("rotatemove", function (ev) {
+    if (shredder) {
+      shredder.updateOrientation({
+        absRotation: startAngle + ev.rotation/Math.PI/16
+      });
+      needsUpdate = true;
+    }
+  });
+
+  var startScale = null;
+  mc.on("pinchstart", function (ev) {
+    startScale = shredder && shredder.scale || 0;
+  });
+
+  mc.on("pinchmove", function (ev) {
+    if (shredder) {
+      shredder.updateOrientation({
+        absScale: startScale * ev.scale
+      });
+      needsUpdate = true;
+    }
+  });
 
   return app;
 })();
