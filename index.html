@@ -42,8 +42,9 @@
         <p>
           <ol>
             <li>Reads huge e.g. 250Mpixel image from file</li>
-            <li>Stores original data to <em>full size non visible canvas</em> and visible version of image to
-              <em>preview canvas</em></li>
+            <li>Stores original data to <em>full size non visible canvas</em> or to <em>&lt;img&gt; tag that is
+              not attached to DOM</em> and creates visible preview version of image to <em>preview canvas</em></li>
+            <li>Uses CSS transformations to show preview how source image is translated.</li>
             <li>Apply <em>rotate</em>, <em>scale</em>, and <em>translate</em> to be able to read any part
               of original image to 256x256 sized tile.</li>
           </ol>
@@ -52,32 +53,49 @@
           Proof of concept implementation to demonstrate splitting custom map tiles in browser instead of backend.
           Issues/more info found in <a href="https://github.com/elhigu/canvas-image-tiles"><span class="icon"></span>https://github.com/elhigu/canvas-image-tiles</a>
         </p>
-        <h4>Challenges</h4>
+        <h4>Transforming image</h4>
         <p>
-          Transforming huge image could be slow with canvas. So actually we are not doing any transformations
-          to source image, but just do inverse transformations for destination canvas to get correct data from
-          huge source image. I.e. we rotate, scale and move 256x256 square to top of source and then fill
-          it with data from correct position.
+          Transforming huge image could be slow with canvas, because potentially browser has to transform whole image
+          before starting to drawImage to destination canvas.
+
+        <p><img src="https://raw.githubusercontent.com/elhigu/canvas-image-tiles/master/doc/direct_transform.jpg" /></p>
+
+          So actually we are not doing any transformations to source image, but just do inverse transformations for
+          destination canvas to get correct data from huge source image. I.e. we rotate, scale and move 256x256 square
+          to top of source and then fill it with data from correct position.
+
+          <p><img src="https://raw.githubusercontent.com/elhigu/canvas-image-tiles/master/doc/inverse_transform.jpg" /></p>
+        </p>
+        <h4>Storing full sized source image</h4>
+        <p>
+          Full sized source image can be stored in Image() object or in canvas object. For some browsers it makes
+          no difference which one is used, but for other browsers, Image() object uses a lot less memory, but causes
+          performance loss and jumpy memory consumption when drawing data to destination canvas.
         </p>
         <p>
-          Read Image() object might be stored to GPU (happened on Chrome) which causes really bad performance
-          when destination canvas where tile is written is in host memory. If both source and destination are
-          canvases it is more probable that both are in the same memory (both in host or both in GPU).
+          On some browsers Image() uses a lot less memory and works better in all cases. Currently by defaults slicer
+          stores original data in off screen Image() object, except for Chrome, which performs really bad unless
+          source is stored in canvas.
         </p>
         <p>
           Showing original image in <em>&lt;img&gt;</em> tag and scaling it with CSS is slow for big images.
-          This why we are using down scaled <em>preview canvas</em> to adjust image orientation for reading
-          pieces.
+          There for we are using down scaled <em>preview canvas</em> to adjust source image orientation in UI.
         </p> 
       </section>
       <section>
         <h3>Try it</h3>
         <p>
-          Reads file in, creates / shows preview (max 2048x2048). Preview is used to fit image on top
-          of grid which is used to select which part of image should be read to 256x256 tile.
+          Reads file in, creates / shows preview (max 2048x2048). Preview canvas is used to position image on top
+          of area where one can select which part of image should be read to 256x256 tile.
+        </p>
+        <p>
+          iOS does automatic downscaling when loading big images, so don't be amazed if image
+          dimensions seem different than you would expect. Also on iOS really big images (like 200Mpix)
+          just silently fail.
         </p>
         <p>
           Drag from <b>S (Scale)</b>, <b>M (Move)</b>, and <b>R (Rotate)</b> buttons to adjust preview image position.
+          Or use pinch, rotate, tap, pan touch gestures on touch devices.
         </p>
 
         <span>Choose image:</span>

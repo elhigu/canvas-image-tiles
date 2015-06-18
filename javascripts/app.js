@@ -1,4 +1,28 @@
 /**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Mikael Lepistö
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+ * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/**
  * Main app.
  *
  * Handles UI events and uses CanvasShredder to handle and adjust image orientation.
@@ -35,23 +59,17 @@ var appContext = (function () {
       }
       shredder = null;
       console.log(f);
-      var reader = new FileReader();
-      reader.onloadend = function (evt) {
-        if (evt.target.readyState == FileReader.DONE) {
-          // load data to image element, to be able to create preview and
-          // original image canvases
-          var newImage = document.createElement('img');
-          newImage.onload = function() {
-            shredder = new CanvasShredder(newImage, previewArea);
-            selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
-            imageInfo.textContent =
-              shredder.srcCanvas.width + "x" +
-              shredder.srcCanvas.height;
-          };
-          newImage.src = evt.target.result;
-        }
+      // load data to image element, to be able to create preview and
+      // original image canvases
+      var newImage = document.createElement('img');
+      newImage.onload = function() {
+        shredder = new CanvasShredder(newImage, previewArea, {storeOriginalInCanvas: false});
+        selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
+        imageInfo.textContent =
+          shredder.srcCanvas.width + "x" +
+          shredder.srcCanvas.height;
       };
-      reader.readAsDataURL(f);
+      newImage.src = URL.createObjectURL(f);
     }
   }
   fileInput.addEventListener('change', handleFileSelect, false);
@@ -191,6 +209,64 @@ var appContext = (function () {
       needsUpdate = true;
     }
   }, false);
+
+  /**
+   * Touch events for tablets etc.
+   */
+
+  var mc = new Hammer(previewArea);
+  mc.get('pinch').set({ enable: true });
+  mc.get('rotate').set({ enable: true });
+
+  mc.on("tap", function (event) {
+    var posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
+    var posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
+    selectPosition(posX, posY);
+    console.log("Selected grid position", event, posX, posY);
+  });
+
+  var startPosition = {};
+  mc.on("panstart", function (ev) {
+    startPosition.x = shredder && shredder.position.x || 0;
+    startPosition.y = shredder && shredder.position.y || 0;
+  });
+
+  mc.on("panmove", function(ev) {
+    if (shredder) {
+      shredder.updateOrientation({
+        absPosition: {x: startPosition.x + ev.deltaX, y: startPosition.y + ev.deltaY}
+      });
+      needsUpdate = true;
+    }
+  });
+
+  var startAngle = null;
+  mc.on("rotatestart", function (ev) {
+    startAngle = shredder && shredder.rotation || 0;
+  });
+
+  mc.on("rotatemove", function (ev) {
+    if (shredder) {
+      shredder.updateOrientation({
+        absRotation: startAngle + ev.rotation/Math.PI/16
+      });
+      needsUpdate = true;
+    }
+  });
+
+  var startScale = null;
+  mc.on("pinchstart", function (ev) {
+    startScale = shredder && shredder.scale || 0;
+  });
+
+  mc.on("pinchmove", function (ev) {
+    if (shredder) {
+      shredder.updateOrientation({
+        absScale: startScale * ev.scale
+      });
+      needsUpdate = true;
+    }
+  });
 
   return app;
 })();
