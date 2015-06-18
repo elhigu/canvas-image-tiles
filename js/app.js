@@ -219,8 +219,8 @@ var appContext = (function () {
   mc.get('rotate').set({ enable: true });
 
   mc.on("tap", function (event) {
-    var posX = (event.center.x-previewArea.offsetLeft) - slicePosition.size/2;
-    var posY = (event.center.y-previewArea.offsetTop) - slicePosition.size/2;
+    var posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
+    var posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
     selectPosition(posX, posY);
     console.log("Selected grid position", event, posX, posY);
   });
