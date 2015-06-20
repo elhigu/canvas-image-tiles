@@ -33,6 +33,24 @@ var appContext = (function () {
   // put stuff here if you like to expose something outside
   var app = {};
 
+  var isMobile = {
+    Android: function() {
+      return /Android/i.test(navigator.userAgent);
+    },
+    BlackBerry: function() {
+      return /BlackBerry/i.test(navigator.userAgent);
+    },
+    iOS: function() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    },
+    Windows: function() {
+      return /IEMobile/i.test(navigator.userAgent);
+    },
+    any: function() {
+      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+    }
+  };
+
   var shredder = null;
   var needsUpdate = false;
   var slicePosition = { x: 0, y: 0, size: 128};
@@ -63,7 +81,7 @@ var appContext = (function () {
       // original image canvases
       var newImage = document.createElement('img');
       newImage.onload = function() {
-        shredder = new CanvasShredder(newImage, previewArea);
+        shredder = new CanvasShredder(newImage, previewArea, {storeOriginalInCanvas: !isMobile.iOS()});
         selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
         imageInfo.textContent =
           shredder.srcCanvas.width + "x" +
