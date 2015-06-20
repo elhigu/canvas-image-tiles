@@ -74,8 +74,8 @@
         </p>
         <p>
           On some browsers Image() uses a lot less memory and works better in all cases. Currently by defaults slicer
-          stores original data in off screen Image() object, except for Chrome, which performs really bad unless
-          source is stored in canvas.
+          stores original data in off screen canvas, except for iOS where using Image() object seems to work
+          better.
         </p>
         <p>
           Showing original image in <em>&lt;img&gt;</em> tag and scaling it with CSS is slow for big images.

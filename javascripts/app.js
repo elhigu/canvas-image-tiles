@@ -63,7 +63,7 @@ var appContext = (function () {
       // original image canvases
       var newImage = document.createElement('img');
       newImage.onload = function() {
-        shredder = new CanvasShredder(newImage, previewArea, {storeOriginalInCanvas: false});
+        shredder = new CanvasShredder(newImage, previewArea, {storeOriginalInCanvas: true});
         selectPosition(previewArea.offsetWidth/2, previewArea.offsetHeight/2);
         imageInfo.textContent =
           shredder.srcCanvas.width + "x" +
