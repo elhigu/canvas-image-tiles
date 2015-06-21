@@ -146,7 +146,6 @@ var appContext = (function () {
    * Adjust image orientation.
    */
   var rotationButton = document.querySelector('.ctrl-btn.rotate');
-  var moveButton = document.querySelector('.ctrl-btn.move');
   var scaleButton = document.querySelector('.ctrl-btn.scale');
 
   var moveEl = null;
@@ -156,7 +155,6 @@ var appContext = (function () {
   }
 
   rotationButton.addEventListener('mousedown', startMouseMove, false);
-  moveButton.addEventListener('mousedown', startMouseMove, false);
   scaleButton.addEventListener('mousedown', startMouseMove, false);
 
   function startMouseMove(event) {
@@ -210,14 +208,6 @@ var appContext = (function () {
   rotationButton.addEventListener('relativemouse', function (event) {
     if (shredder) {
       shredder.updateOrientation({ deltaRotation: event.detail.speed/100 });
-      needsUpdate = true;
-    }
-  }, false);
-  moveButton.addEventListener('relativemouse', function (event) {
-    if (shredder) {
-      shredder.updateOrientation({
-        deltaPosition: {x: event.detail.dx, y: event.detail.dy}
-      });
       needsUpdate = true;
     }
   }, false);
