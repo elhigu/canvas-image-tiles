@@ -134,19 +134,11 @@ var appContext = (function () {
     selectPos.style.height = slicePosition.size + "px";
     needsUpdate = true;
   }
-  function onPreviewAreaClick(event) {
-    var posX = (event.pageX-previewArea.offsetLeft) - slicePosition.size/2;
-    var posY = (event.pageY-previewArea.offsetTop) - slicePosition.size/2;
-    selectPosition(posX, posY);
-    console.log("Selected grid position", event, posX, posY);
-  }
-  previewArea.addEventListener('mousedown', onPreviewAreaClick, false);
 
   /**
    * Adjust image orientation.
    */
   var rotationButton = document.querySelector('.ctrl-btn.rotate');
-  var moveButton = document.querySelector('.ctrl-btn.move');
   var scaleButton = document.querySelector('.ctrl-btn.scale');
 
   var moveEl = null;
@@ -156,7 +148,6 @@ var appContext = (function () {
   }
 
   rotationButton.addEventListener('mousedown', startMouseMove, false);
-  moveButton.addEventListener('mousedown', startMouseMove, false);
   scaleButton.addEventListener('mousedown', startMouseMove, false);
 
   function startMouseMove(event) {
@@ -213,14 +204,6 @@ var appContext = (function () {
       needsUpdate = true;
     }
   }, false);
-  moveButton.addEventListener('relativemouse', function (event) {
-    if (shredder) {
-      shredder.updateOrientation({
-        deltaPosition: {x: event.detail.dx, y: event.detail.dy}
-      });
-      needsUpdate = true;
-    }
-  }, false);
   scaleButton.addEventListener('relativemouse', function (event) {
     if (shredder) {
       shredder.updateOrientation({deltaScale: event.detail.speed / 100});
@@ -237,8 +220,15 @@ var appContext = (function () {
   mc.get('rotate').set({ enable: true });
 
   mc.on("tap", function (event) {
-    var posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
-    var posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
+    var posX, posY;
+
+    if (event.pointerType == "mouse") {
+      posX = (event.srcEvent.pageX-previewArea.offsetLeft) - slicePosition.size/2;
+      posY = (event.srcEvent.pageY-previewArea.offsetTop) - slicePosition.size/2;
+    } else {
+      posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
+      posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
+    }
     selectPosition(posX, posY);
     console.log("Selected grid position", event, posX, posY);
   });
