@@ -134,13 +134,6 @@ var appContext = (function () {
     selectPos.style.height = slicePosition.size + "px";
     needsUpdate = true;
   }
-  function onPreviewAreaClick(event) {
-    var posX = (event.pageX-previewArea.offsetLeft) - slicePosition.size/2;
-    var posY = (event.pageY-previewArea.offsetTop) - slicePosition.size/2;
-    selectPosition(posX, posY);
-    console.log("Selected grid position", event, posX, posY);
-  }
-  previewArea.addEventListener('mousedown', onPreviewAreaClick, false);
 
   /**
    * Adjust image orientation.
@@ -227,8 +220,15 @@ var appContext = (function () {
   mc.get('rotate').set({ enable: true });
 
   mc.on("tap", function (event) {
-    var posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
-    var posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
+    var posX, posY;
+
+    if (event.pointerType == "mouse") {
+      posX = (event.srcEvent.pageX-previewArea.offsetLeft) - slicePosition.size/2;
+      posY = (event.srcEvent.pageY-previewArea.offsetTop) - slicePosition.size/2;
+    } else {
+      posX = (event.center.x-previewArea.offsetLeft+document.body.scrollLeft) - slicePosition.size/2;
+      posY = (event.center.y-previewArea.offsetTop+document.body.scrollTop) - slicePosition.size/2;
+    }
     selectPosition(posX, posY);
     console.log("Selected grid position", event, posX, posY);
   });
