@@ -70,19 +70,40 @@
         </p>
         <h4>Storing full sized source image</h4>
         <p>
-          Full sized source image can be stored in Image() object or in canvas object. For some browsers it makes
-          no difference which one is used, but for other browsers, Image() object uses a lot less memory, but causes
-          performance loss and jumpy memory consumption when drawing data to destination canvas.
+          Full sized source image can be stored in Image() object or in Canvas DOM element.
         </p>
         <p>
-          On some browsers Image() uses a lot less memory and works better in all cases. Currently by defaults slicer
-          stores original data in off screen canvas, except for iOS where using Image() object seems to work
+          For some browsers it makes no difference which one is used, but for other browsers, e.g. desktop Chrome
+          storing data in Image() object causes performance loss and jumpy memory consumption when drawing data
+          to destination canvas.
+        </p>
+        <p>
+          On some platforms (e.g. iOS Chrome and Safari) Image() object uses a lot less memory and just works
           better.
         </p>
         <p>
-          Showing original image in <em>&lt;img&gt;</em> tag and scaling it with CSS is slow for big images.
-          There for we are using down scaled <em>preview canvas</em> to adjust source image orientation in UI.
-        </p> 
+          Currently by default slicer stores original data in off screen canvas, except for iOS where using
+          Image() object seems to work better.
+        </p>
+        <h4>Preview image for adjusting rotation and scale</h4>
+        <p>
+          Showing the full size image in <em>&lt;img&gt;</em> tag and scaling it with CSS is slow for big images.
+        </p>
+        <p>
+          For adjusting image orientation we create smaller canvas of 2048px width or height (keeping correct aspect ratio)
+          and draw downscaled version of the original image.
+        </p>
+        <p>
+          On UI side we can show preview canvas with correct orientation by applying direct CSS transformations
+          to preview (so that in preview it looks like the source image is transformed). However when data is copied
+          from full sized source we apply inverse transformation for destination canvas for doing actual
+          copying image data from full size source to destination canvas.
+        </p>
+        <p>
+          Helper class does automatically all the direct / inverse transformation calculations and outputs
+          directly correct CSS line for direct transformations and internally applies inverse transformations
+          when creating tile from source image.
+        </p>
       </section>
       <section>
         <h3>Try it</h3>
