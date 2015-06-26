@@ -38,9 +38,12 @@
  *   Causes more memory load specially on mobile devices, but may make copying tiles
  *   faster (on some platforms copying from canvas->canvas is lot more efficient than
  *   img->canvas due to place where image is stored).
+ * @param options.noCssAutoUpdate {boolean} Default false, if this set CSS is never updated
+ *   automatically.
  * @constructor
  */
 function CanvasShredder(sourceImage, previewAreaEl, options) {
+  this.options = options;
 
   // initial origo is in the center of preview area
   this.initialOrigoX = previewAreaEl.offsetWidth/2;
@@ -103,9 +106,10 @@ CanvasShredder.prototype.destroy = function () {
  * Change src image orientation and schedule preview canvas to be updated on next draw.
  *
  * @param update {Object=} Orientation change describer.
- * @param update.deltaRotation {Number} Rotation change.
+ * @param update.deltaRotation {Number} Rotation change in radians.
  * @param update.deltaPosition {{ x: Number, y: Number }} Position change.
- * @param update.deltaScale {Number} Scale change.
+ * @param update.deltaScale {Number} Scale change. 1.0 means that preview image is
+ *        shown 1:1 scale on preview area. so its width or height is 2048px.
  */
 CanvasShredder.prototype.updateOrientation = function (update) {
   if (update) {
@@ -131,8 +135,9 @@ CanvasShredder.prototype.updateOrientation = function (update) {
     }
   }
 
-  // update preview CSS before next paint
-  if (!this.waitForPreviewCssUpdate) {
+  // update preview CSS before next paint if autoupdate enabled
+  var autoUpdateEnabled = !this.options.noCssAutoUpdate;
+  if (autoUpdateEnabled && !this.waitForPreviewCssUpdate) {
     this.waitForPreviewCssUpdate = true;
     requestAnimationFrame(function () {
       if (this.previewCanvas) {
