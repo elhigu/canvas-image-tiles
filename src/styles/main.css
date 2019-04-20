@@ -1,0 +1,65 @@
+body {
+}
+
+/* dimensions assigned dynamically */
+.cit_select-position {
+ position: absolute;
+ background: yellow;
+ outline: 1px solid black;
+ z-index: 1;
+ opacity: 0.5;
+ min-height: 10px;
+ min-width: 10px;
+}
+
+.cit_preview-area {
+ position: relative;
+ height: 400px;
+ width: 100%;
+ overflow: hidden;
+ outline: 1px solid black;
+ margin: 0.5rem;
+}
+
+
+/* dimensions assigned dynamically */
+.cit_dst-canvas {
+ position: absolute;
+ outline: 1px solid;
+ bottom: 10px;
+ right: 10px;
+ z-index: 10;
+}
+
+.cit_buttons {
+ position: absolute;
+ top: 0;
+ right: 0;
+ z-index: 100;
+}
+
+.cit_ctrl-btn {
+ position: relative;
+ width: 30px;
+ height: 30px;
+ float: right;
+ clear: both;
+ outline: 1px solid white;
+ opacity: 0.6;
+ cursor: pointer;
+ text-align: center;
+ color: white;
+ line-height: 30px;
+}
+.cit_ctrl-btn:hover {
+ opacity: 1;
+}
+.cit_ctrl-btn.cit_move {
+ background: forestgreen;
+}
+.cit_ctrl-btn.cit_rotate {
+ background: darkred;
+}
+.cit_ctrl-btn.cit_scale {
+ background: dodgerblue;
+}

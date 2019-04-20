@@ -1,0 +1,23 @@
+{
+    "name": "canvas-image-tiles",
+    "version": "1.0.0",
+    "main": "src/app.ts",
+    "repository": "https://github.com/paxperscientiam/canvas-image-tiles",
+    "author": "Chris <chrisdavidramos@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "hammerjs": "^2.0.8"
+    },
+    "scripts": {
+        "fuse": "ts-node -T fuse.ts",
+        "lint": "tslint src/app.ts"
+    },
+    "devDependencies": {
+        "@types/hammerjs": "^2.0.36",
+        "@types/node": "^11.13.5",
+        "fuse-box": "^3.7.1",
+        "terser": "^3.17.0",
+        "typescript": "^3.4.4",
+        "uglify-js": "^3.5.5"
+    }
+}
